@@ -44,7 +44,12 @@ export function Post({ author, publishedAt, content }) {
 
   // Function for monitoring textarea
   function handleNewCommentChange() {
+    event.target.setCustomValidity("");
     setNewCommentText(event.target.value);
+  }
+
+  function handleNewCommentInvalid(event) {
+    event.target.setCustomValidity("Esse campo é obrigatório!");
   }
 
   // Function delete comment receiving pros of your child component
@@ -59,6 +64,9 @@ export function Post({ author, publishedAt, content }) {
     });
     setComments(commentsWithoutDeletedOne);
   }
+
+  // Variável para verificar o disabled do botão
+  const isNewCommentInputEmpty = newCommentText.length == 0;
 
   return (
     <article className={styles.post}>
@@ -100,10 +108,14 @@ export function Post({ author, publishedAt, content }) {
           placeholder="Deixe um comentário"
           value={newCommentText}
           onChange={handleNewCommentChange}
+          required={true}
+          onInvalid={handleNewCommentInvalid}
         />
 
         <footer>
-          <button type="submit">Publicar</button>
+          <button type="submit" disabled={isNewCommentInputEmpty}>
+            Publicar
+          </button>
         </footer>
       </form>
 
